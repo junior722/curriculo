@@ -2,69 +2,130 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Você aceita?</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bora Beber?</title>
+    <!-- Inclui Tailwind CSS para estilização -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(to right, #6EE7B7, #34D399, #10B981); /* Gradiente de verde */
+            overflow: hidden; /* Garante que o botão não cause scroll */
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 1.5rem; /* Cantos mais arredondados */
+            padding: 2.5rem; /* Mais padding */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* Sombra mais pronunciada */
             text-align: center;
-            margin-top: 100px;
-            font-family: Arial, sans-serif;
-            overflow: hidden;
-            position: relative;
+            max-width: 90%; /* Ajuste para telas menores */
+            width: 500px; /* Largura máxima */
+            position: relative; /* Para o posicionamento absoluto do botão "Não" */
         }
-        button {
-            padding: 15px 30px;
-            font-size: 18px;
-            margin: 20px;
+        .btn {
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            border-radius: 0.75rem; /* Cantos arredondados para botões */
+            transition: all 0.3s ease; /* Transição suave para hover */
             cursor: pointer;
-            border: none;
-            border-radius: 8px;
+            border: none; /* Remove borda padrão */
         }
-        #sim {
-            background-color: #4CAF50;
+        .btn-sim {
+            background-color: #3B82F6; /* Azul vibrante */
             color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
-        #nao {
-            background-color: #f44336;
+        .btn-sim:hover {
+            background-color: #2563EB; /* Azul mais escuro no hover */
+            transform: translateY(-2px); /* Efeito de levantar */
+        }
+        .btn-nao {
+            background-color: #EF4444; /* Vermelho vibrante */
             color: white;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            position: absolute; /* Posicionamento absoluto para mover */
+            /* Inicialmente, o botão "Não" não deve ter pointer-events */
+            pointer-events: auto; /* Apenas para garantir que ele é clicável ao ser gerado */
+        }
+        .btn-nao:hover {
+             background-color: #DC2626; /* Vermelho mais escuro no hover */
+             transform: translateY(-2px); /* Efeito de levantar */
+        }
+        /* Media Queries para responsividade */
+        @media (max-width: 640px) {
+            .container {
+                padding: 1.5rem;
+            }
+            h1 {
+                font-size: 2rem; /* Tamanho da fonte menor para telas pequenas */
+            }
+            .btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
-
-    <h1>Vamos Beber Hoje?</h1>
-
-    <button id="sim">Sim</button>
-    <button id="nao">Não</button>
+    <div class="container">
+        <h1 class="text-5xl font-extrabold text-gray-800 mb-8 tracking-tight">Bora Beber?</h1>
+        <div class="flex flex-col sm:flex-row justify-center items-center gap-6">
+            <button id="simBtn" class="btn btn-sim w-full sm:w-auto">Sim!</button>
+            <button id="naoBtn" class="btn btn-nao w-full sm:w-auto">Não</button>
+        </div>
+    </div>
 
     <script>
-        const simButton = document.getElementById('sim');
-        const naoButton = document.getElementById('nao');
+        const simBtn = document.getElementById('simBtn');
+        const naoBtn = document.getElementById('naoBtn');
+        const container = document.querySelector('.container');
 
-        simButton.onclick = function() {
-            window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
-        };
+        // Função para mover o botão "Não" para uma posição aleatória
+        function moveNaoButton() {
+            const padding = 20; // Adiciona um preenchimento de 20px das bordas
+            const naoBtnWidth = naoBtn.offsetWidth;
+            const naoBtnHeight = naoBtn.offsetHeight;
 
-        function moverBotao() {
-            const maxX = window.innerWidth - naoButton.offsetWidth;
-            const maxY = window.innerHeight - naoButton.offsetHeight;
+            // Calcula o X e Y máximos considerando o preenchimento
+            const maxX = window.innerWidth - naoBtnWidth - padding * 2;
+            const maxY = window.innerHeight - naoBtnHeight - padding * 2;
 
-            const randomX = Math.random() * maxX;
-            const randomY = Math.random() * maxY;
+            // Gera posições aleatórias dentro da área com preenchimento
+            const randomX = Math.floor(Math.random() * maxX) + padding;
+            const randomY = Math.floor(Math.random() * maxY) + padding;
 
-            naoButton.style.left = `${randomX}px`;
-            naoButton.style.top = `${randomY}px`;
+            naoBtn.style.position = 'fixed'; // Use fixed para mover em relação à janela
+            naoBtn.style.left = `${randomX}px`;
+            naoBtn.style.top = `${randomY}px`;
+            naoBtn.style.zIndex = '1000'; // Garante que o botão esteja acima de outros elementos
         }
 
-        // Funciona no PC (mouse hover)
-        naoButton.onmouseover = moverBotao;
+        // Listener para o botão "Não"
+        naoBtn.addEventListener('click', (e) => {
+            e.preventDefault(); // Impede qualquer ação padrão do clique
+            moveNaoButton();
+        });
 
-        // Funciona no mobile (toque)
-        naoButton.ontouchstart = moverBotao;
+        // Listener para o botão "Sim"
+        simBtn.addEventListener('click', () => {
+            window.location.href = "https://www.youtube.com/watch?v=BQfNTA1q2co";
+        });
+
+        // Posiciona o botão "Não" inicialmente de forma aleatória para torná-lo difícil de clicar
+        window.addEventListener('load', () => {
+            moveNaoButton(); // Posiciona inicialmente
+        });
+
+        // Ajusta a posição do botão "Não" se a janela for redimensionada
+        window.addEventListener('resize', () => {
+            moveNaoButton();
+        });
+
     </script>
-
 </body>
 </html>
